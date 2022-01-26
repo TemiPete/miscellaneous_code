@@ -3,17 +3,25 @@
 # ===============
 # Usage: Miscellaneous R functions I use
 # Author: Temi
+# Date: Tuesday Jan 26 2022
 # 
 # 
 #
 
-#' A genetic qqplot
-#' @param 
-#' @param
+#' Create a generic qqplot
+#' @param data_points A vector of data points
+#' @param distribution A distribution to compare with. Please input just one value
+#' @param neg_log1_values Should the plot use the -log10 values? Defaults to F
+#' @param mean
+#' @param sd
+#' @param df
+#' @param min
+#' @param max
 #' @return a qqplot object
 qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform', 't'), neg_log10_values=F, mean=0, sd=1, df=1, min=0, max=1){
     
     n <- length(data_points)
+    
     if(length(distribution) > 1){
         stop('Input one distribution.')
     }
@@ -31,7 +39,7 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
     
     if(neg_log10_values == T){
         theoretical_quantiles <- -log10(theoretical_quantiles)
-        data_points <- -log10(data_points)
+        data_points <- -log10(data_points) 
         xlab_use <- '-log10(Theoretical quantiles)'
         ylab_use <- '-log10(Sample quantiles)'
     }
@@ -41,4 +49,4 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
     
 }
 
-#qq_generic(result$observed_chistats, distribution = 'normal')
+# qq_generic(result$observed_chistats, distribution = 'normal')
