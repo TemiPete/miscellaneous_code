@@ -50,3 +50,16 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
 }
 
 # qq_generic(result$observed_chistats, distribution = 'normal')
+
+
+#' A function to generate N positive numbers between two numbers that less than that sum up to M
+#' @param N N-positive integers
+#' @param M What N should sum to
+#' @param min
+#' @param max
+#' @returns A vector of length N that sum up to M
+rand_vect_cont <- function(N, M, min=0, max=1) {
+    vec <- runif(N, min = min, max = max)
+    vec / sum(vec) * M
+}
+
