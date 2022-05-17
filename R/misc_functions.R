@@ -18,7 +18,8 @@
 #' @param min
 #' @param max
 #' @return a qqplot object
-qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform', 't'), neg_log10_values=F, mean=0, sd=1, df=1, min=0, max=1){
+qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform', 't', 'poisson', 'neg_binom', 'gamma'), 
+                       neg_log10_values=F, mean=0, sd=1, df=1, min=0, max=1, lambda=0.5, shape=20, rate=1, ...){
     
     n <- length(data_points)
     
@@ -31,6 +32,9 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
                                     'chisq' = qchisq(ppoints(n), df=df)[order(order(data_points))],
                                     'uniform' = qunif(ppoints(n), min=min, max=max)[order(order(data_points))],
                                     't' = qt(ppoints(n), df=df)[order(order(data_points))],
+                                    'poisson' = qpois(ppoints(n), lambda = lambda)[order(order(data_points))],
+                                    'gamma' = qgamma(ppoints(n), shape = shape)[order(order(data_points))],
+                                    #'neg_binom' = qnbinom(ppoints(n), )
                                     stop('The distribution is invalid. Input a valid distribution.')
     )
     
@@ -44,8 +48,8 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
         ylab_use <- '-log10(Sample quantiles)'
     }
     
-    plot(theoretical_quantiles, data_points, xlab = xlab_use, ylab = ylab_use)
-    abline(a = 0, b = 1, col = "red")
+    plot(theoretical_quantiles, data_points, xlab = xlab_use, ylab = ylab_use, ...)
+    abline(a = 0, b = 1, col = "red", ...)
     
 }
 
@@ -62,4 +66,20 @@ rand_vect_cont <- function(N, M, min=0, max=1) {
     vec <- runif(N, min = min, max = max)
     vec / sum(vec) * M
 }
+
+#' Compute a matrix to the power of n
+#' Adapted from: https://stackoverflow.com/questions/3274818/matrix-power-in-r
+#' @param x a matrix
+#' @param n nth power
+#' @returns
+matrix_power <- function(x, n){
+    if (n == 0) {
+        I <- diag(length(diag(x)))
+        return(I)        
+    }
+    base::Reduce(`%*%`, replicate(n, x, simplify = FALSE))
+}
+
+#' Function to bind (cbind or rbind) vectors of different lengths into a dataframe
+#' 
 
