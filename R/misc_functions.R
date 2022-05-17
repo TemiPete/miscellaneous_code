@@ -19,7 +19,7 @@
 #' @param max
 #' @return a qqplot object
 qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform', 't', 'poisson', 'neg_binom', 'gamma'), 
-                       neg_log10_values=F, mean=0, sd=1, df=1, min=0, max=1, lambda=0.5, shape=20, rate=1, ...){
+                       neg_log10_values=F, mean=0, sd=1, df=1, min=0, max=1, lambda=0.5, shape=20, rate=1, params_to_plot=NULL, params_to_abline=NULL){
     
     n <- length(data_points)
     
@@ -48,8 +48,9 @@ qq_generic <- function(data_points, distribution=c('normal', 'chisq', 'uniform',
         ylab_use <- '-log10(Sample quantiles)'
     }
     
-    plot(theoretical_quantiles, data_points, xlab = xlab_use, ylab = ylab_use, ...)
-    abline(a = 0, b = 1, col = "red", ...)
+    do.call(base::plot, c(list(x=theoretical_quantiles, y=data_points, xlab = xlab_use, ylab = ylab_use), params_to_plot))
+    #plot(theoretical_quantiles, data_points, xlab = xlab_use, ylab = ylab_use, ...)
+    do.call(graphics::abline, c(list(a = 0, b = 1, col = "red"), params_to_abline))
     
 }
 
